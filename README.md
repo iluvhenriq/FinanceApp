@@ -1,59 +1,66 @@
-# Finance App
+# FinanceApp
 
-Aplicativo de controle financeiro pessoal que importa transações automaticamente via email do Inter.
+A personal finance tracker that automatically reads purchase confirmation emails and organizes your spending data in real time.
 
-## Funcionalidades
+## What it does
 
-- Dashboard com receitas, gastos e gráficos do mês
-- Importação automática de transações via email do Inter
-- Cadastro manual de transações
-- Deletar transações
-- Relatórios mensais com comparativo dos últimos 3 meses
+- Connects to your Gmail account via IMAP
+- Reads and parses purchase confirmation emails (currently supports Banco Inter)
+- Extracts transaction data: date, amount, description, and category
+- Stores everything in a local SQLite database
+- Exposes a REST API so the frontend can fetch and display your financial data
 
-## Requisitos
+## Tech Stack
 
-- Python 3.10+
-- Conta Gmail com IMAP ativado
-- Senha de App do Gmail (não a senha normal)
+**Backend**
+- Python
+- FastAPI
+- SQLite
+- IMAP (Gmail integration)
 
-## Instalação
+**Frontend**
+- React
+- Vite
 
-1. Clone o repositório:
+## Project Structure
+FinanceApp/
+├── core/
+│   └── database.py       # Database logic and queries
+├── finance-front/        # React frontend
+├── api.py                # FastAPI REST endpoints
+├── main.py               # Entry point
+└── finance.db            # Local SQLite database
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /transacoes | List transactions by month/year |
+| GET | /saldo | Get balance for a given month |
+| GET | /resumo | Spending summary by category |
+| GET | /categoria | Filter transactions by category |
+| POST | /transacoes | Add a transaction manually |
+| DELETE | /transacoes/{id} | Delete a transaction |
+
+## How to Run
+
+**Backend**
+```bash
+pip install fastapi uvicorn
+uvicorn api:app --reload
 ```
-git clone URL_DO_REPO
-cd FinanceApp
+
+**Frontend**
+```bash
+cd finance-front
+npm install
+npm run dev
 ```
 
-2. Instale as dependências:
-```
-pip install -r requirements.txt
-```
-
-3. Crie o arquivo `.env` na raiz do projeto:
-```
-EMAIL=seu_email@gmail.com
-SENHA=sua_senha_de_app
-```
-
-4. Como gerar a senha de app do Gmail:
-   - Acesse myaccount.google.com
-   - Segurança → Verificação em duas etapas (ative se não tiver)
-   - Segurança → Senhas de app
-   - Gere uma senha para "Email" e cole no `.env`
-
-## Como rodar
-
-```
-python main.py
-```
-
-## Observações
-
-- O botão **Atualizar** importa os 10 emails mais recentes do Inter
-- O botão **Busca Completa** importa todos os emails do Inter
-- O arquivo `.env` nunca deve ser compartilhado ou commitado
-- O banco de dados `finance.db` é criado automaticamente na primeira execução
+API runs on `http://localhost:8000`
+Frontend runs on `http://localhost:5174`
+API docs available at `http://localhost:8000/docs`
 
 ## Status
 
-v1.0-alpha — base funcional, front em desenvolvimento
+Alpha 1.0 - functional for personal use. Frontend rebuild (Alpha 2.0) in progress with React.
